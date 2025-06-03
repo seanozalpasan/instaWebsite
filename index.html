@@ -27,13 +27,37 @@
                     </div>
                     <h2>Upload Your Instagram Data</h2>
                     <p class="upload-description">
-                        Drop your Instagram data ZIP file here or click to browse
+                        Drop your Instagram data ZIP file here or click to browse<br>
+                        <small style="opacity: 0.7;">Get your data from Instagram Settings → Privacy & Security → Download Your Information</small>
                     </p>
                     <input type="file" id="fileInput" accept=".zip" hidden>
                     <button class="upload-btn" id="uploadBtn">
                         Choose ZIP File
                     </button>
+                    <p class="upload-alternative">
+                        Having issues? <a href="#" id="manualUploadLink">Upload individual HTML files instead</a> | 
+                        <a href="#" id="testWithSampleData">Test with sample data</a>
+                    </p>
                     <div class="drop-zone" id="dropZone"></div>
+                    
+                    <!-- Manual upload section (hidden by default) -->
+                    <div class="manual-upload hidden" id="manualUpload">
+                        <h3>Upload Individual Files</h3>
+                        <p style="color: #888; margin-bottom: 20px; font-size: 0.9rem;">
+                            Look for HTML files in your Instagram data export.<br>
+                            They're usually named like "followers.html" or "followers_1.html" and "following.html"
+                        </p>
+                        <div class="file-input-group">
+                            <label>Followers HTML file:</label>
+                            <input type="file" id="followersFileInput" accept=".html">
+                        </div>
+                        <div class="file-input-group">
+                            <label>Following HTML file:</label>
+                            <input type="file" id="followingFileInput" accept=".html">
+                        </div>
+                        <button class="process-btn" id="processManualBtn">Process Files</button>
+                        <p><a href="#" id="backToZipLink">← Back to ZIP upload</a></p>
+                    </div>
                 </div>
             </div>
 
@@ -79,7 +103,7 @@
             <div class="error-section hidden" id="errorSection">
                 <div class="error-icon">⚠️</div>
                 <h3>Oops! Something went wrong</h3>
-                <p id="errorMessage">There was an error processing your file.</p>
+                <p id="errorMessage" style="white-space: pre-wrap;">There was an error processing your file.</p>
                 <button class="retry-btn" id="retryBtn">Try Again</button>
             </div>
         </main>

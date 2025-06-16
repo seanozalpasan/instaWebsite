@@ -3,117 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram Follow Analyzer</title>
+    <title>Instagram Follower Analyzer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="bg-animation"></div>
+    
     <div class="container">
-        <header>
-            <h1 class="title">
-                <span class="gradient-text">Instagram</span> Follow Analyzer
-            </h1>
-            <p class="subtitle">Find out who doesn't follow you back</p>
-        </header>
+        <div class="header">
+            <h1>Instagram Follower Analyzer</h1>
+            <p class="subtitle">Discover who doesn't follow you back</p>
+        </div>
 
-        <main>
-            <div class="upload-section" id="uploadSection">
-                <div class="upload-card">
-                    <div class="upload-icon">
-                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
-                        </svg>
-                    </div>
-                    <h2>Upload Your Instagram Data</h2>
-                    <p class="upload-description">
-                        Drop your Instagram data ZIP file here or click to browse<br>
-                        <small style="opacity: 0.7;">Get your data from Instagram Settings → Privacy & Security → Download Your Information</small>
-                    </p>
-                    <input type="file" id="fileInput" accept=".zip" hidden>
-                    <button class="upload-btn" id="uploadBtn">
-                        Choose ZIP File
-                    </button>
-                    <p class="upload-alternative">
-                        Having issues? <a href="#" id="manualUploadLink">Upload individual HTML files instead</a> | 
-                        <a href="#" id="testWithSampleData">Test with sample data</a>
-                    </p>
-                    <div class="drop-zone" id="dropZone"></div>
-                    
-                    <!-- Manual upload section (hidden by default) -->
-                    <div class="manual-upload hidden" id="manualUpload">
-                        <h3>Upload Individual Files</h3>
-                        <p style="color: #888; margin-bottom: 20px; font-size: 0.9rem;">
-                            Look for HTML files in your Instagram data export.<br>
-                            They're usually named like "followers.html" or "followers_1.html" and "following.html"
-                        </p>
-                        <div class="file-input-group">
-                            <label>Followers HTML file:</label>
-                            <input type="file" id="followersFileInput" accept=".html">
-                        </div>
-                        <div class="file-input-group">
-                            <label>Following HTML file:</label>
-                            <input type="file" id="followingFileInput" accept=".html">
-                        </div>
-                        <button class="process-btn" id="processManualBtn">Process Files</button>
-                        <p><a href="#" id="backToZipLink">← Back to ZIP upload</a></p>
-                    </div>
+        <div class="instructions">
+            <h3>📱 How to use:</h3>
+            <ol>
+                <li>Download your Instagram data from Settings → Privacy → Download Your Information</li>
+                <li>Extract the downloaded ZIP file</li>
+                <li>Upload the entire folder containing your Instagram data</li>
+                <li>The app will analyze your followers_1.html and following.html files from the connections/followers_and_following/ folder</li>
+            </ol>
+            <div class="folder-structure">
+                📁 Your Instagram Data<br>
+                ├── 📁 connections<br>
+                │   └── 📁 followers_and_following<br>
+                │       ├── <span class="highlight">followers_1.html</span> ✓<br>
+                │       ├── <span class="highlight">following.html</span> ✓<br>
+                │       └── ...<br>
+                ├── 📁 files<br>
+                └── start_here.html
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <span class="upload-icon">📂</span>
+            <h2>Upload Your Instagram Data Folder</h2>
+            <p style="margin-bottom: 2rem; color: #888;">Select the main folder containing the 'connections' subdirectory</p>
+            <label class="upload-label">
+                Choose Folder
+                <input type="file" id="folderInput" webkitdirectory directory multiple>
+            </label>
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing your Instagram data...</p>
+        </div>
+
+        <div class="results" id="results">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalFollowers">0</div>
+                    <div class="stat-label">Total Followers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalFollowing">0</div>
+                    <div class="stat-label">Total Following</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="notFollowingBack">0</div>
+                    <div class="stat-label">Don't Follow Back</div>
                 </div>
             </div>
 
-            <div class="loading-section hidden" id="loadingSection">
-                <div class="loader"></div>
-                <p>Analyzing your Instagram data...</p>
+            <div class="results-section">
+                <h3 class="section-title">
+                    Accounts that don't follow you back
+                    <span class="count-badge" id="notFollowingBackCount">0</span>
+                </h3>
+                <div class="username-grid" id="notFollowingBackList"></div>
             </div>
-
-            <div class="results-section hidden" id="resultsSection">
-                <div class="stats-cards">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalFollowers">0</div>
-                        <div class="stat-label">Total Followers</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalFollowing">0</div>
-                        <div class="stat-label">Total Following</div>
-                    </div>
-                    <div class="stat-card highlight">
-                        <div class="stat-number" id="notFollowingBack">0</div>
-                        <div class="stat-label">Don't Follow You Back</div>
-                    </div>
-                </div>
-
-                <div class="results-container">
-                    <div class="results-header">
-                        <h3>People who don't follow you back</h3>
-                        <button class="export-btn" id="exportBtn">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="17 8 12 3 7 8"></polyline>
-                                <line x1="12" y1="3" x2="12" y2="15"></line>
-                            </svg>
-                            Export Results
-                        </button>
-                    </div>
-                    <div class="results-list" id="resultsList"></div>
-                </div>
-
-                <button class="reset-btn" id="resetBtn">Analyze Another Account</button>
-            </div>
-
-            <div class="error-section hidden" id="errorSection">
-                <div class="error-icon">⚠️</div>
-                <h3>Oops! Something went wrong</h3>
-                <p id="errorMessage" style="white-space: pre-wrap;">There was an error processing your file.</p>
-                <button class="retry-btn" id="retryBtn">Try Again</button>
-            </div>
-        </main>
-
-        <footer>
-            <p>Your data is processed locally in your browser. Nothing is uploaded to any server.</p>
-        </footer>
+        </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
